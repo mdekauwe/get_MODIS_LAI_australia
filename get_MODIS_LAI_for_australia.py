@@ -32,6 +32,7 @@ def main(years, product_code, collection, label, bands):
     for yr in years:
         for doy in xrange(001, 366, 8):
             for band in bands:
+                # HTTP needs to know DOY and day, month, year, so figure it out
                 d = dt.datetime.strptime("%s %s" % (str(yr), str(doy)), "%Y %j")
                 date_str = d.strftime('%Y.%m.%d')
 
