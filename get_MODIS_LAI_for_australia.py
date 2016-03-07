@@ -16,6 +16,8 @@ Notes:
 * NB. I say LAI, but the script is generic enough that it could be tweaked.
 """
 
+import os
+import sys
 import urllib
 import calendar
 import datetime as dt
@@ -24,25 +26,29 @@ __author__  = "Martin De Kauwe"
 __version__ = "1.0 (29.02.2016)"
 __email__   = "mdekauwe@gmail.com"
 
-def main(years, product_code, collection, label, bands):
+def get_data(years, product_code, collection, label, band):
 
     base_url = ("http://remote-sensing.nci.org.au/u39/public/data/modis/"
                 "lpdaac-mosaics-cmar/v1-hdf4/aust/")
 
     for yr in years:
         for doy in xrange(001, 366, 8):
-            for band in bands:
-                # HTTP needs to know DOY and day, month, year, so figure it out
-                d = dt.datetime.strptime("%s %s" % (str(yr), str(doy)), "%Y %j")
-                date_str = d.strftime('%Y.%m.%d')
+            # HTTP needs to know DOY and day, month, year, so figure it out
+            d = dt.datetime.strptime("%s %s" % (str(yr), str(doy)), "%Y %j")
+            date_str = d.strftime('%Y.%m.%d')
 
-                url = base_url + "%s.%s/%s"  % (product_code, collection,
-                                                date_str)
-                fn = "%s.%s.%s.aust.%s.%s.%s.hdf.gz" % (product_code, yr, doy,
-                                                        collection, band,
-                                                        label)
-                print fn
-                urllib.urlretrieve (url, fn)
+            url = base_url + "%s.%s/%s/"  % (product_code, collection, date_str)
+            if doy < 10:
+                fn = "%s.%s.00%s.aust.%s.%s.%s.hdf.gz" % (product_code, yr,
+                                                          doy, collection,
+                                                          band, label)
+            elif doy > 10 and doy < 100:
+                fn = "%s.%s.0%s.aust.%s.%s.%s.hdf.gz" % (product_code, yr,
+                                                         doy, collection,
+                                                         band, label)
+
+            urllib.urlretrieve(os.path.join(url, fn), fn)
+
 
 if __name__ == "__main__":
 
@@ -50,9 +56,15 @@ if __name__ == "__main__":
     dataset = "MOD15A2.005"
     product_code = "MOD15A2"
     collection = "005"
-    # band 01 = fpar; band 02 = lai; band 03 = quality; band 04 = extra quality
-    # band 05 = fpar_stdev; band 06 = lai_stdev
-    bands = ["b01", "b03", "b06"]
-    label = "1000m_fpar"
 
-    main(years, product_code, collection, label, bands)
+    band = "b02"
+    label = "1000m_lai"
+    get_data(years, product_code, collection, label, band)
+
+    band = "b03"
+    label = "1000m_quality"
+    get_data(years, product_code, collection, label, band)
+
+    band = "b06"
+    label = "1000m_lai_stdev"
+    get_data(years, product_code, collection, label, band)
