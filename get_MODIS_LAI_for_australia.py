@@ -40,7 +40,7 @@ def get_data(years, product_code, collection, label, band):
             # HTTP needs to know DOY and day, month, year, so figure it out
             d = dt.datetime.strptime("%s %s" % (str(yr), str(doy)), "%Y %j")
             date_str = d.strftime('%Y.%m.%d')
-
+            print doy, " : ", date_str
             url = base_url + "%s.%s/%s/"  % (product_code, collection, date_str)
             if doy < 10:
                 fn = "%s.%s.00%s.aust.%s.%s.%s.hdf.gz" % (product_code, yr,
@@ -67,10 +67,10 @@ if __name__ == "__main__":
     label = "1000m_lai"
     get_data(years, product_code, collection, label, band)
 
-    band = "b03"
-    label = "1000m_quality"
-    get_data(years, product_code, collection, label, band)
+    #band = "b03"
+    #label = "1000m_quality"
+    #get_data(years, product_code, collection, label, band)
 
-    band = "b06"
-    label = "1000m_lai_stdev"
-    get_data(years, product_code, collection, label, band)
+    #band = "b06"
+    #label = "1000m_lai_stdev"
+    #get_data(years, product_code, collection, label, band)
