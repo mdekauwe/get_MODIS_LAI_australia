@@ -27,7 +27,11 @@ __version__ = "1.0 (29.02.2016)"
 __email__   = "mdekauwe@gmail.com"
 
 def get_data(years, product_code, collection, label, band):
-    out_dir = "hdf_zipped"
+
+    out_fdir = "hdf_zipped"
+    if not os.path.exists(out_fdir):
+        os.makedirs(out_fdir)
+
     base_url = ("http://remote-sensing.nci.org.au/u39/public/data/modis/"
                 "lpdaac-mosaics-cmar/v1-hdf4/aust/")
 
@@ -48,7 +52,7 @@ def get_data(years, product_code, collection, label, band):
                                                          band, label)
 
             in_url = os.path.join(url, fn)
-            out_path = os.path.join(out_dir, fn)
+            out_path = os.path.join(out_fdir, fn)
             urllib.urlretrieve(in_url, out_path)
 
 
