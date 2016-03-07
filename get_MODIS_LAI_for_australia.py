@@ -42,14 +42,16 @@ def get_data(years, product_code, collection, label, band):
             date_str = d.strftime('%Y.%m.%d')
             print doy, " : ", date_str
             url = base_url + "%s.%s/%s/"  % (product_code, collection, date_str)
+
             if doy < 10:
-                fn = "%s.%s.00%s.aust.%s.%s.%s.hdf.gz" % (product_code, yr,
-                                                          doy, collection,
-                                                          band, label)
+                doy_str = "00%s" % (doy)
             elif doy > 10 and doy < 100:
-                fn = "%s.%s.0%s.aust.%s.%s.%s.hdf.gz" % (product_code, yr,
-                                                         doy, collection,
-                                                         band, label)
+                doy_str = "0%s" % (doy)
+            else:
+                doy_str = "%s" % (doy)
+
+            fn = "%s.%s.%s.aust.%s.%s.%s.hdf.gz" % (product_code, yr, doy_str,
+                                                    collection, band, label)
 
             in_url = os.path.join(url, fn)
             out_path = os.path.join(out_fdir, fn)
@@ -67,10 +69,10 @@ if __name__ == "__main__":
     label = "1000m_lai"
     get_data(years, product_code, collection, label, band)
 
-    #band = "b03"
-    #label = "1000m_quality"
-    #get_data(years, product_code, collection, label, band)
+    band = "b03"
+    label = "1000m_quality"
+    get_data(years, product_code, collection, label, band)
 
-    #band = "b06"
-    #label = "1000m_lai_stdev"
-    #get_data(years, product_code, collection, label, band)
+    band = "b06"
+    label = "1000m_lai_stdev"
+    get_data(years, product_code, collection, label, band)
