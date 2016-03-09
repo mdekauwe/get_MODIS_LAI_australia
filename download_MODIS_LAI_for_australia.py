@@ -26,7 +26,7 @@ __author__  = "Martin De Kauwe"
 __version__ = "1.0 (29.02.2016)"
 __email__   = "mdekauwe@gmail.com"
 
-def get_data(years, product_code, collection, label, band):
+def get_data(product_code, collection, label, band):
 
     out_fdir = "hdf_zipped"
     if not os.path.exists(out_fdir):
@@ -35,7 +35,11 @@ def get_data(years, product_code, collection, label, band):
     base_url = ("http://remote-sensing.nci.org.au/u39/public/data/modis/"
                 "lpdaac-mosaics-cmar/v1-hdf4/aust/")
 
-    for yr in years:
+    for yr in xrange(2001, 2016):
+        out_yr_dir = os.path.join(out_fdir, "%s" % (str(yr)))
+        if not os.path.exists(out_yr_dir):
+            os.makedirs(out_yr_dir)
+
         for doy in xrange(001, 366, 8):
             # HTTP needs to know DOY and day, month, year, so figure it out
             d = dt.datetime.strptime("%s %s" % (str(yr), str(doy)), "%Y %j")
@@ -54,25 +58,24 @@ def get_data(years, product_code, collection, label, band):
                                                     collection, band, label)
 
             in_url = os.path.join(url, fn)
-            out_path = os.path.join(out_fdir, fn)
+            out_path = os.path.join(out_yr_dir, fn)
             urllib.urlretrieve(in_url, out_path)
 
 
 if __name__ == "__main__":
 
-    years = [2014]
     dataset = "MOD15A2.005"
     product_code = "MOD15A2"
     collection = "005"
 
     band = "b02"
     label = "1000m_lai"
-    get_data(years, product_code, collection, label, band)
+    get_data(product_code, collection, label, band)
 
     band = "b03"
     label = "1000m_quality"
-    get_data(years, product_code, collection, label, band)
+    get_data(product_code, collection, label, band)
 
-    band = "b06"
-    label = "1000m_lai_stdev"
-    get_data(years, product_code, collection, label, band)
+    #band = "b06"
+    #label = "1000m_lai_stdev"
+    #get_data(years, product_code, collection, label, band)
