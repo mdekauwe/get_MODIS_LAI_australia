@@ -71,8 +71,8 @@ def main():
 
         # average across years
         data = np.where(data < 0.0, np.nan, data)
-        big_data[:,:,:] = data.nanmean(axis=0)
-        big_data.tofile(f)
+        big_data[i,:,:] = np.nanmean(data, axis=0)
+    big_data.tofile(f)
 
 
 if __name__ == "__main__":
