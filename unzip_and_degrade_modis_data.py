@@ -64,9 +64,6 @@ def main():
             degraded_fn_hdr = os.path.join(out_yr_dir, "tmp.hdr")
             shutil.move(degraded_fn_hdr, hdr_fn)
 
-            sys.exit()
-
-
 
 def degrade_to_10km(src_filename, match_filename, dst_filename):
 
