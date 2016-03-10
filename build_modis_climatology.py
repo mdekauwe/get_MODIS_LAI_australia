@@ -28,7 +28,7 @@ def main():
     nyears = 15
 
     big_data = np.zeros((ndays,nrows,ncols))
-    ata = np.zeros((nyears,nrows,ncols))
+    data = np.zeros((nyears,nrows,ncols))
 
     f = open("modis_climatology.bin", "wb")
 
@@ -67,10 +67,10 @@ def main():
             else:
                 lai = np.ones((nrows,ncols)) * -999.9
 
-            yrs_data[j,:,:] = lai
+            data[j,:,:] = lai
 
         # average across years
-        data = np.where(yrs_data < 0.0, np.nan, yrs_data)
+        data = np.where(data < 0.0, np.nan, data)
         big_data[:,:,:] = data.nanmean(axis=0)
         big_data.tofile(f)
 
