@@ -16,6 +16,7 @@ def unzip_data():
 
     out_fdir = "hdfs"
     for yr in xrange(2001, 2016):
+        print yr
         fdir = "hdf_zipped/%s" % (str(yr))
 
         out_yr_dir = os.path.join(out_fdir, "%s" % (str(yr)))
@@ -23,8 +24,6 @@ def unzip_data():
             os.makedirs(out_yr_dir)
 
         for fname in glob.glob(os.path.join(fdir, '*.gz')):
-            print fname
-
             in_file = gzip.open(fname, 'rb')
             s = in_file.read()
             in_file.close()
