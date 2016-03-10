@@ -26,17 +26,21 @@ def unzip_data():
         for fname in glob.glob(os.path.join(fdir, '*.gz')):
             print fname
             in_file = gzip.open(fname, 'rb')
-            s = in_file.read()
-            in_file.close()
 
-            # get the filename without gz.
-            out_fname = os.path.basename(fname)[:-3]
+            try:
+                s = in_file.read()
+                in_file.close()
 
-            if not os.path.exists(out_fdir):
-                os.makedirs(out_fdir)
+                # get the filename without gz.
+                out_fname = os.path.basename(fname)[:-3]
 
-            open(os.path.join(out_yr_dir, out_fname), 'w').write(s)
+                if not os.path.exists(out_fdir):
+                    os.makedirs(out_fdir)
 
+                open(os.path.join(out_yr_dir, out_fname), 'w').write(s)
+            except IOError:
+                # there are few bad files which we will need to skip later
+                continue
 if __name__ == "__main__":
 
     unzip_data()
