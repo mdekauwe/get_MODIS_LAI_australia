@@ -22,8 +22,8 @@ def main():
     scale_factor = 0.1
     lai_valid_max = 100
     qa_valid_max = 254
-    ncols = 4790
-    nrows = 3726
+    ncols = 841
+    nrows = 681
     ndays = 46
     nyears = 15
 
@@ -32,7 +32,7 @@ def main():
 
     f = open("modis_climatology.bin", "wb")
 
-    for i, doy in enumerate(xrange(1, 336, 8)):
+    for i, doy in enumerate(xrange(1, 361+8, 8)):
         print doy
         if doy < 10:
             doy_st = "00%s" % (str(doy))
@@ -71,7 +71,7 @@ def main():
 
             # close dataset
             lai = None
-            
+
         # average across years
         data = np.where(data < 0.0, np.nan, data)
         big_data[i,:,:] = np.nanmean(data, axis=0)
