@@ -69,6 +69,9 @@ def main():
 
             data[j,:,:] = lai
 
+            # close dataset
+            lai = None
+            
         # average across years
         data = np.where(data < 0.0, np.nan, data)
         big_data[i,:,:] = np.nanmean(data, axis=0)
