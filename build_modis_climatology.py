@@ -47,13 +47,13 @@ def main():
             fname = "MOD15A2.%s.%s.aust.005.b02.1000m_lai.hdf" % \
                     (str(yr), doy_st)
 
+
             fname = os.path.join(fdir, fname)
             if os.path.exists(fname):
 
                 lai = gdal.Open(fname)
-
                 lai = lai.ReadAsArray()
-                lai = np.where(lai > lai_valid_max, -999.9, lai)
+                lai = np.where(lai <= lai_valid_max, np.nan, lai)
                 lai *= scale_factor
 
                 qa_fname = string.replace(fname, "b02", "b03")
@@ -62,10 +62,9 @@ def main():
                 qa = qa.ReadAsArray()
 
                 # Just take best QA = 0
-                lai = np.where(qa != 0, -999.9, lai)
-
+                lai = np.where(qa != 0, np.nan, lai)
             else:
-                lai = np.ones((nrows,ncols)) * -999.9
+                lai = np.ones((nrows,ncols)) * np.nan
 
             data[j,:,:] = lai
 
@@ -73,7 +72,8 @@ def main():
             lai = None
 
         # average across years
-        data = np.where(data < 0.0, np.nan, data)
+        #data = np.where(data < 0.0, np.nan, data)
+        # big_data[i,:,:] = np.ma.average(data, weights=1.0 / lai_std**2, axis=0)
         big_data[i,:,:] = np.nanmean(data, axis=0)
     big_data.tofile(f)
 

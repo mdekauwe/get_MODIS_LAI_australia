@@ -68,14 +68,14 @@ if __name__ == "__main__":
     product_code = "MOD15A2"
     collection = "005"
 
-    band = "b02"
-    label = "1000m_lai"
-    get_data(product_code, collection, label, band)
+    #band = "b02"
+    #label = "1000m_lai"
+    #get_data(product_code, collection, label, band)
 
-    band = "b03"
-    label = "1000m_quality"
-    get_data(product_code, collection, label, band)
+    #band = "b03"
+    #label = "1000m_quality"
+    #get_data(product_code, collection, label, band)
 
-    #band = "b06"
-    #label = "1000m_lai_stdev"
-    #get_data(years, product_code, collection, label, band)
+    band = "b06"
+    label = "1000m_lai_stdev"
+    get_data(product_code, collection, label, band)
