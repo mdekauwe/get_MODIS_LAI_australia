@@ -4,22 +4,6 @@
 
 Get the MODIS LAI (or any...) data for Australia from the [NCI website] (http://remote-sensing.nci.org.au/u39/public/html/modis/lpdaac-mosaics-cmar/)
 
-ENVI
-description = {CSIRO mosaiced and reprojected MODIS LPDAAC data for Australia
- at 1000m resolution.
-
-See http://remote-sensing.nci.org.au/u39/public/html/modis/lpdaac-mosaics/cmar}
-
-samples = 4790
-
-lines   = 3726
-
-bands   = 1
-
-file type = HDF Scientific Data
-
-map info = {Geographic Lat/Lon, 1.0, 1.0, 110.0, -10.0,
- 0.00939484947807933, 0.00939484947807933, WGS-84, units=Degrees}
-default stretch = 0.0 100.0 linear [ADJUST PER PRODUCT]
-band names = {1000m LAI} [ADJUST PER PRODUCT]
-sensor type = MODIS LPDAAC
+get the data: download_MODIS_LAI_for_australia.py
+unzip files & degrade to 10 km to match AWAP: unzip_and_degrade_modis_data.py
+build climatology: build_modis_climatology.py
