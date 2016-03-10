@@ -1,5 +1,6 @@
 *.hdf
 *.gz
+*.bin
 
 data_gz/*
 hdfs/*

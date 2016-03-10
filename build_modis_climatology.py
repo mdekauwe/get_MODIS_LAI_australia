@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Average over all DOYs across years and make a large MODIS binary file
+Average over all DOYs across years and make a large MODIS climatology
 """
 
 import glob
@@ -12,7 +12,7 @@ import string
 import matplotlib.pyplot as plt
 
 __author__  = "Martin De Kauwe"
-__version__ = "1.0 (07.03.2016)"
+__version__ = "1.0 (10.03.2016)"
 __email__   = "mdekauwe@gmail.com"
 
 
@@ -30,7 +30,7 @@ def main():
     big_data = np.zeros((ndays,nrows,ncols))
     ata = np.zeros((nyears,nrows,ncols))
 
-    f = open("all_modis_data.bin", "wb")
+    f = open("modis_climatology.bin", "wb")
 
     for i, doy in enumerate(xrange(1, 336, 8)):
         print doy
@@ -57,7 +57,7 @@ def main():
                 lai *= scale_factor
 
                 qa_fname = string.replace(fname, "b02", "b03")
-                qa_fname = string.replace(qa_fname, "1000m_lai", "1000m_quality")
+                qa_fname = string.replace(qa_fname, "1000m_lai","1000m_quality")
                 qa = gdal.Open(qa_fname)
                 qa = qa.ReadAsArray()
 
