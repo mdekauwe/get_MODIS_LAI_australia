@@ -53,16 +53,24 @@ def main():
 
                 lai = gdal.Open(fname)
                 lai = lai.ReadAsArray()
-                lai = np.where(lai <= lai_valid_max, np.nan, lai)
+                lai = np.where(lai > lai_valid_max, np.nan, lai)
                 lai *= scale_factor
 
                 qa_fname = string.replace(fname, "b02", "b03")
                 qa_fname = string.replace(qa_fname, "1000m_lai","1000m_quality")
                 qa = gdal.Open(qa_fname)
                 qa = qa.ReadAsArray()
+                qa = np.where(qa > qa_valid_max, np.nan, qa)
+
+                std_fn = string.replace(fname, "b02", "b06")
+                std_fn = string.replace(std_fn, "1000m_lai","1000m_lai_stdev")
+                lai_std = gdal.Open(unc_fn)
+                lai_std = qa.ReadAsArray()
+                lai_std = np.where(lai_std > lai_valid_max, np.nan, lai_std)
 
                 # Just take best QA = 0
                 lai = np.where(qa != 0, np.nan, lai)
+                lai_std = np.where(qa != 0, np.nan, lai_std)
             else:
                 lai = np.ones((nrows,ncols)) * np.nan
 
