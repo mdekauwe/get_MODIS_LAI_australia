@@ -47,14 +47,6 @@ def main():
         qa = gdal.Open(qa_fname)
         qa = qa.ReadAsArray()
 
-        #good = ( (0 * 2**7) +
-        #         (0 * 2**6) +
-        #         (0 * 2**5) +
-        #         (0 * 2**4) +
-        #         (0 * 2**3) +
-        #         (0 * 2**2) +
-        #         (0 * 2**1) +
-        #         (0 * 2**0) )
         # Just take best QA = 0
         lai = np.where(qa != 0, np.nan, lai)
         pixel.append(lai[row,col])
