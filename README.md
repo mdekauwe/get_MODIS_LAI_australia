@@ -8,6 +8,6 @@ Get the MODIS LAI (or any...) data for Australia from the [NCI website] (http://
 
 - unzip files & degrade to 10 km to match AWAP: unzip_and_degrade_modis_data.py
 
-- build climatology: build_modis_climatology.py
+- build climatology, weighting day sample by stdev layer: build_modis_climatology.py
 
-- spline the data: spline_modis_climatology.py
+- put a spline thought each pixel and extraplote to get 365 days of data: spline_modis_climatology.py

@@ -31,14 +31,25 @@ def main():
 
     outdays = 360
     out = np.zeros((outdays,nrows,ncols))
-    
+
     for i in xrange(nrows):
         for j in xrange(ncols):
             print "%d/%d : %d/%d" % (i, nrows, j, ncols)
             #f = interpolate.interp1d(xdays, data[:,i,j], kind='linear')
             #ynew = f(xnew)
 
-            tck = interpolate.splrep(xdays, data[:,i,j],s=0.2)
+            # Interpolation does not allow for extrapolation, so we won't be
+            # able to get LAI estimates beyond doy 361. To get around this
+            # we are going to repeat the time series and spline that.
+
+            #i = 400
+            #j = 800
+
+            #plt.plot(data[:,i,j])
+            #plt.show()
+            #sys.exit()
+
+            tck = interpolate.splrep(xdays, data[:,i,j], s=0.2)
             ynew = interpolate.splev(xnew, tck, der=0)
 
             out[:,i,j] = ynew
