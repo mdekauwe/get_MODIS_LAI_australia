@@ -1,4 +1,4 @@
-# get_MODIS_LAI_australia
+# Get MODIS LAI data for Australia
 
 [Martin De Kauwe](https://mdekauwe.github.io/)
 
