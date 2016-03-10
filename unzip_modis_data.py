@@ -13,22 +13,29 @@ __email__   = "mdekauwe@gmail.com"
 
 
 def unzip_data():
-    fdir = "hdf_zipped"
+
     out_fdir = "hdfs"
-    for fname in glob.glob(os.path.join(fdir, '*.gz')):
-        print fname
-        
-        in_file = gzip.open(fname, 'rb')
-        s = in_file.read()
-        in_file.close()
+    for yr in xrange(2001, 2016):
+        fdir = "hdf_zipped/%s" % (str(yr))
 
-        # get the filename without gz.
-        out_fname = os.path.basename(fname)[:-3]
+        out_yr_dir = os.path.join(out_fdir, "%s" % (str(yr)))
+        if not os.path.exists(out_yr_dir):
+            os.makedirs(out_yr_dir)
 
-        if not os.path.exists(out_fdir):
-            os.makedirs(out_fdir)
+        for fname in glob.glob(os.path.join(fdir, '*.gz')):
+            print fname
 
-        open(os.path.join(out_fdir, out_fname), 'w').write(s)
+            in_file = gzip.open(fname, 'rb')
+            s = in_file.read()
+            in_file.close()
+
+            # get the filename without gz.
+            out_fname = os.path.basename(fname)[:-3]
+
+            if not os.path.exists(out_fdir):
+                os.makedirs(out_fdir)
+
+            open(os.path.join(out_yr_dir, out_fname), 'w').write(s)
 
 if __name__ == "__main__":
 
