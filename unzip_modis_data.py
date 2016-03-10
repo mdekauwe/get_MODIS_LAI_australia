@@ -24,7 +24,6 @@ def unzip_data():
             os.makedirs(out_yr_dir)
 
         for fname in glob.glob(os.path.join(fdir, '*.gz')):
-            print fname
             in_file = gzip.open(fname, 'rb')
 
             try:
