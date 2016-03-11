@@ -78,8 +78,12 @@ def main():
                 #lai = np.where(qa != 0, np.nan, lai)
                 #lai_std = np.where(qa != 0, np.nan, lai_std)
 
-                # see bit info below
-                good_QA = np.array([0, 24, 128, 136])
+                # Relax QA
+                # echo "00000000" | gawk -f ~/bin/awk/bit2d.awk
+                # echo "00100000" | gawk -f ~/bin/awk/bit2d.awk
+                # echo "00011000" | gawk -f ~/bin/awk/bit2d.awk
+                # echo "00111000" | gawk -f ~/bin/awk/bit2d.awk
+                good_QA = np.array([0, 24, 32, 56])
                 lai[qa != good_QA] = np.nan
                 lai_std[qa != good_QA] = np.nan
 
@@ -113,49 +117,3 @@ def main():
 if __name__ == "__main__":
 
     main()
-
-    """
-    bit = ((0 * 2**7) +  # bit 7
-       (0 * 2**6) +  # bit 6
-       (0 * 2**5) +  # bit 5
-       (0 * 2**4) +  # bit 4
-       (0 * 2**3) +  # bit 3
-       (0 * 2**2) +  # bit 2
-       (0 * 2**1) +  # bit 1
-       (0 * 2**0))   # bit 0
-
-    print bit
-
-    bit = ((0 * 2**7) +  # bit 7
-           (0 * 2**6) +  # bit 6
-           (0 * 2**5) +  # bit 5
-           (1 * 2**4) +  # bit 4
-           (1 * 2**3) +  # bit 3
-           (0 * 2**2) +  # bit 2
-           (0 * 2**1) +  # bit 1
-           (0 * 2**0))   # bit 0
-
-    print bit
-
-    bit = ((1 * 2**7) +  # bit 7
-           (0 * 2**6) +  # bit 6
-           (0 * 2**5) +  # bit 5
-           (0 * 2**4) +  # bit 4
-           (0 * 2**3) +  # bit 3
-           (0 * 2**2) +  # bit 2
-           (0 * 2**1) +  # bit 1
-           (0 * 2**0))   # bit 0
-
-    print bit
-
-    bit = ((1 * 2**7) +  # bit 7
-           (0 * 2**6) +  # bit 6
-           (0 * 2**5) +  # bit 5
-           (0 * 2**4) +  # bit 4
-           (1 * 2**3) +  # bit 3
-           (0 * 2**2) +  # bit 2
-           (0 * 2**1) +  # bit 1
-           (0 * 2**0))   # bit 0
-
-    print bit
-    """
