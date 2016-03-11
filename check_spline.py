@@ -68,13 +68,13 @@ def main():
 
     ncols = 841
     nrows = 681
-    ndays = 360
+    ndays = 366
 
     f = open("modis_climatology_splined.bin", "r")
     data = np.fromfile(f).reshape((ndays,nrows,ncols))
     f.close()
 
-    ncolours = 6
+    ncolours = 7
     vmin = 0
     vmax = 6
 

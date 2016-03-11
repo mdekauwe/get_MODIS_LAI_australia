@@ -78,12 +78,10 @@ def main():
                 #lai = np.where(qa != 0, np.nan, lai)
                 #lai_std = np.where(qa != 0, np.nan, lai_std)
 
-                # Relax QA
+                # Relax QA, take saturation data too.
                 # echo "00000000" | gawk -f ~/bin/awk/bit2d.awk
                 # echo "00100000" | gawk -f ~/bin/awk/bit2d.awk
-                # echo "00011000" | gawk -f ~/bin/awk/bit2d.awk
-                # echo "00111000" | gawk -f ~/bin/awk/bit2d.awk
-                good_QA = np.array([0, 24, 32, 56])
+                good_QA = np.array([0, 32])
                 lai[qa != good_QA] = np.nan
                 lai_std[qa != good_QA] = np.nan
 

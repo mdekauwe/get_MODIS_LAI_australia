@@ -26,10 +26,10 @@ def main():
     data = np.fromfile(f).reshape((ndays,nrows,ncols))
     f.close()
 
-    xnew = np.arange(1.,361)
+    xnew = np.arange(1.,367)
     xdays = np.arange(1, 361+8, 8)
 
-    outdays = 360
+    outdays = 366
     out = np.zeros((outdays,nrows,ncols))
 
     for i in xrange(nrows):
@@ -42,15 +42,16 @@ def main():
             # able to get LAI estimates beyond doy 361. To get around this
             # we are going to repeat the time series and spline that.
 
-            #i = 400
-            #j = 800
+            # repeat LAI x 3
+            y_extend = np.tile(data[:,i,j], 3)
+            x_extend = np.hstack((xdays-46*8, xdays, xdays+46*8))
 
-            #plt.plot(data[:,i,j])
-            #plt.show()
-            #sys.exit()
-
-            tck = interpolate.splrep(xdays, data[:,i,j], s=0.2)
+            # interpolate the data
+            tck = interpolate.splrep(x_extend, y_extend, s=1.0)
             ynew = interpolate.splev(xnew, tck, der=0)
+
+            #tck = interpolate.splrep(xdays, data[:,i,j], s=0.2)
+            #ynew = interpolate.splev(xnew, tck, der=0)
 
             out[:,i,j] = ynew
 
