@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """
-Average over all DOYs across years and make a large MODIS climatology
+Average over all DOYs across years and make a large MODIS climatology.
+- we are using the LAI sd as a weighting to build the climatology
 """
 
 import glob
@@ -89,8 +90,9 @@ def main():
         data_ma = np.ma.MaskedArray(data, mask=np.isnan(data))
         data_sd_ma = np.ma.MaskedArray(data_sd, mask=np.isnan(data_sd))
 
-        clim = np.ma.average(data_ma, weights=1.0 / data_sd_ma**2, axis=0)
+        clim = np.ma.average(data_ma, weights=1.0/data_sd_ma**2, axis=0)
         clim = np.where(clim <= 0.0, np.nan, clim) # sea
+        clim = np.ma.fix_invalid(clim, fill_value=np.nan) #remove masked array
         big_data[i,:,:] = clim
 
 
