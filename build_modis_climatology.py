@@ -29,6 +29,7 @@ def main():
 
     big_data = np.zeros((ndays,nrows,ncols))
     data = np.zeros((nyears,nrows,ncols))
+    data_sd = np.zeros((nyears,nrows,ncols))
 
     f = open("modis_climatology.bin", "wb")
 
@@ -54,6 +55,7 @@ def main():
                 lai = gdal.Open(fname)
                 lai = lai.ReadAsArray()
                 lai = np.where(lai > lai_valid_max, np.nan, lai)
+                lai = np.where(lai == 0, np.nan, lai) # fill values top of image
                 lai *= scale_factor
 
                 qa_fname = string.replace(fname, "b02", "b03")
@@ -61,12 +63,15 @@ def main():
                 qa = gdal.Open(qa_fname)
                 qa = qa.ReadAsArray()
                 qa = np.where(qa > qa_valid_max, np.nan, qa)
+                qa = np.where(np.isnan(lai), np.nan, qa)
 
                 std_fn = string.replace(fname, "b02", "b06")
                 std_fn = string.replace(std_fn, "1000m_lai","1000m_lai_stdev")
-                lai_std = gdal.Open(unc_fn)
-                lai_std = qa.ReadAsArray()
+                lai_std = gdal.Open(std_fn)
+                lai_std = lai_std.ReadAsArray()
                 lai_std = np.where(lai_std > lai_valid_max, np.nan, lai_std)
+                lai_std = np.where(lai_std == 0, np.nan, lai_std)
+                lai_std *= scale_factor
 
                 # Just take best QA = 0
                 lai = np.where(qa != 0, np.nan, lai)
@@ -75,14 +80,25 @@ def main():
                 lai = np.ones((nrows,ncols)) * np.nan
 
             data[j,:,:] = lai
+            data_sd[j,:,:] = lai_std
 
             # close dataset
             lai = None
 
         # average across years
-        #data = np.where(data < 0.0, np.nan, data)
-        # big_data[i,:,:] = np.ma.average(data, weights=1.0 / lai_std**2, axis=0)
-        big_data[i,:,:] = np.nanmean(data, axis=0)
+        data_ma = np.ma.MaskedArray(data, mask=np.isnan(data))
+        data_sd_ma = np.ma.MaskedArray(data_sd, mask=np.isnan(data_sd))
+
+        clim = np.ma.average(data_ma, weights=1.0 / data_sd_ma**2, axis=0)
+        clim = np.where(clim <= 0.0, np.nan, clim) # sea
+        big_data[i,:,:] = clim
+
+
+        #plt.imshow(big_data[i,:,:])
+        #plt.colorbar()
+        #plt.show()
+        #sys.exit()
+        #big_data[i,:,:] = np.nanmean(data, axis=0)
     big_data.tofile(f)
 
 

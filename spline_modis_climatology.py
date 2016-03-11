@@ -34,7 +34,7 @@ def main():
 
     for i in xrange(nrows):
         for j in xrange(ncols):
-            print "%d/%d : %d/%d" % (i, nrows, j, ncols)
+            #print "%d/%d : %d/%d" % (i, nrows, j, ncols)
             #f = interpolate.interp1d(xdays, data[:,i,j], kind='linear')
             #ynew = f(xnew)
 
