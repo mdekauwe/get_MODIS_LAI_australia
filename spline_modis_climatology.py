@@ -34,6 +34,12 @@ def main():
 
     for i in xrange(nrows):
         for j in xrange(ncols):
+
+            #i = 400
+            #j = 800
+            #print "E", 111.975 + (j * 0.05)
+            #print "S", 9.97499999999999 + (i * 0.05)
+
             #print "%d/%d : %d/%d" % (i, nrows, j, ncols)
             #f = interpolate.interp1d(xdays, data[:,i,j], kind='linear')
             #ynew = f(xnew)
@@ -52,6 +58,11 @@ def main():
 
             #tck = interpolate.splrep(xdays, data[:,i,j], s=0.2)
             #ynew = interpolate.splev(xnew, tck, der=0)
+
+            #plt.plot(xnew, ynew, "r-")
+            #plt.plot(xdays, data[:,400,800], "ko")
+            #plt.show()
+            #sys.exit()
 
             out[:,i,j] = ynew
 
