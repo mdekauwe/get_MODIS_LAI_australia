@@ -75,12 +75,13 @@ def main():
     data = np.fromfile(f).reshape((ndays,nrows,ncols))
     f.close()
 
-    ncolours = 9
-    vmin = -3
-    vmax = 3
+    ncolours = 7
+    vmin = 0
+    vmax = 6
 
-    cmap = sns.blend_palette(["#762a83", "white", "#1b7837"], ncolours, as_cmap=True)
-    #cmap = sns.blend_palette(["white", "#1b7837"], ncolours, as_cmap=True)
+    #cmap = sns.blend_palette(["#762a83", "white", "#1b7837"], ncolours, as_cmap=True)
+    cmap = sns.blend_palette(["white", "#1b7837"], ncolours, as_cmap=True)
+    
 
     sns.set(style="white")
 
@@ -112,53 +113,10 @@ def main():
     #cmap = cmap_discretize(plt.cm.YlGnBu, ncolours)
 
 
+    # plot jan average
+    climatology = data[0:30,:,:].mean(axis=0)
 
-    climatology = data[24,:,:]
-    scale_factor = 0.1
-    lai_valid_max = 100
-    qa_valid_max = 254
-    ncols = 841
-    nrows = 681
-
-    fname = "hdfs/2003/MOD15A2.2003.025.aust.005.b02.1000m_lai.hdf"
-    lai = gdal.Open(fname)
-    lai = lai.ReadAsArray()
-    lai = np.where(lai > lai_valid_max, np.nan, lai)
-    lai = np.where(lai == 0, np.nan, lai) # fill values top of image
-    lai *= scale_factor
-
-    qa_fname = string.replace(fname, "b02", "b03")
-    qa_fname = string.replace(qa_fname, "1000m_lai","1000m_quality")
-    qa = gdal.Open(qa_fname)
-    qa = qa.ReadAsArray()
-    qa = np.where(qa > qa_valid_max, np.nan, qa)
-    qa = np.where(np.isnan(lai), np.nan, qa)
-
-    std_fn = string.replace(fname, "b02", "b06")
-    std_fn = string.replace(std_fn, "1000m_lai","1000m_lai_stdev")
-    lai_std = gdal.Open(std_fn)
-    lai_std = lai_std.ReadAsArray()
-    lai_std = np.where(lai_std > lai_valid_max, np.nan, lai_std)
-    lai_std = np.where(lai_std == 0, np.nan, lai_std)
-    lai_std *= scale_factor
-
-    # Just take best QA = 0
-    #lai = np.where(qa != 0, np.nan, lai)
-    #lai_std = np.where(qa != 0, np.nan, lai_std)
-
-    # Relax QA, take saturation data too.
-    # echo "00000000" | gawk -f ~/bin/awk/bit2d.awk
-    # echo "00100000" | gawk -f ~/bin/awk/bit2d.awk
-    good_QA = np.array([0, 32])
-    lai[qa != good_QA] = np.nan
-    lai_std[qa != good_QA] = np.nan
-
-
-    anomaly = lai-climatology
-
-
-
-    m.imshow(anomaly, cmap,
+    m.imshow(climatology, cmap,
              colors.Normalize(vmin=vmin, vmax=vmax, clip=True),
              origin='upper', interpolation='nearest')
 
@@ -166,7 +124,7 @@ def main():
     cbar = colorbar_index(cax=grid.cbar_axes[0], ncolours=ncolours, cmap=cmap,
                           orientation='horizontal', vmin=vmin, vmax=vmax)
 
-    fig.savefig("/Users/mq20101267/Desktop/LAI_anomaly.png", bbox_inches='tight',
+    fig.savefig("/Users/mq20101267/Desktop/LAI.png", bbox_inches='tight',
                 pad_inches=0.1, dpi=300)
 
 

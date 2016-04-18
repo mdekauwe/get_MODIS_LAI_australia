@@ -30,30 +30,34 @@ def main():
     xdays = np.arange(1, 361+8, 8)
 
     outdays = 366
-    out = np.zeros((outdays,nrows,ncols))
+    ovars = 2
+    out = np.zeros((ovars,outdays,nrows,ncols))
 
     for i in xrange(nrows):
         for j in xrange(ncols):
 
             #i = 400
             #j = 800
-            #print "E", 111.975 + (j * 0.05)
-            #print "S", 9.97499999999999 + (i * 0.05)
-
-            #print "%d/%d : %d/%d" % (i, nrows, j, ncols)
-            #f = interpolate.interp1d(xdays, data[:,i,j], kind='linear')
-            #ynew = f(xnew)
-
             # Interpolation does not allow for extrapolation, so we won't be
             # able to get LAI estimates beyond doy 361. To get around this
             # we are going to repeat the time series and spline that.
+
+            # Save the raw data, incase we every which to check interpolated
+            # climatologies in the future
+            raw = np.zeros(outdays)
+            for ii, doy in enumerate(xnew):
+                if doy not in xdays:
+                    raw[ii] = -999.9
+                else:
+                    idx = np.argwhere(xdays==doy)[0][0]
+                    raw[ii] = data[idx,i,j]
 
             # repeat LAI x 3
             y_extend = np.tile(data[:,i,j], 3)
             x_extend = np.hstack((xdays-46*8, xdays, xdays+46*8))
 
             # interpolate the data
-            tck = interpolate.splrep(x_extend, y_extend, s=1.0)
+            tck = interpolate.splrep(x_extend, y_extend, s=0.7)
             ynew = interpolate.splev(xnew, tck, der=0)
 
             #tck = interpolate.splrep(xdays, data[:,i,j], s=0.2)
@@ -64,7 +68,12 @@ def main():
             #plt.show()
             #sys.exit()
 
-            out[:,i,j] = ynew
+            # replace nans with -999.9 for consistency
+            idx = np.where(np.isnan(ynew))
+            ynew[idx] = -999.9
+
+            out[0,:,i,j] = ynew
+            out[1,:,i,j] = raw
 
 
     of = open("modis_climatology_splined.bin", "wb")
