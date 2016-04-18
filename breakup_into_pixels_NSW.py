@@ -18,7 +18,7 @@ import os
 import re
 import tarfile
 import glob
-
+import shutil
 
 def main():
 
@@ -30,6 +30,11 @@ def main():
     row_en = 560
     col_st = 570
     col_en = 840
+
+    out_dirname = "pixels"
+    if os.path.exists(out_dirname):
+        shutil.rmtree(out_dirname)
+        os.mkdir(out_dirname)
 
     f = open("modis_climatology_splined.bin", "r")
     data = np.fromfile(f).reshape((nvars,ndays,nrows,ncols))
@@ -43,12 +48,14 @@ def main():
             if np.all(pixel[0,:] > -500.0):
                 pixel.tofile("pixels/%d_%d_LAI.bin" % (row, col))
 
-
     out_fn = "NSW_LAI_pixels.tar.gz"
     with tarfile.open(out_fn, "w:gz") as tar:
         for name in glob.glob("pixels/*.bin"):
             tar.add(name)
-    
+
+    # clean up
+    if os.path.exists(out_dirname):
+        shutil.rmtree(out_dirname)
 
     """
     data = np.fromfile("pixels/%d_%d_LAI.bin" % (450, 717))
