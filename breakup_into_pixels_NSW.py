@@ -16,9 +16,8 @@ import numpy as np
 import sys
 import os
 import re
-
-import gdal
-import string
+import tarfile
+import glob
 
 
 def main():
@@ -43,7 +42,14 @@ def main():
             # i.e. don't write the bad pixels out
             if np.all(pixel[0,:] > -500.0):
                 pixel.tofile("pixels/%d_%d_LAI.bin" % (row, col))
-            
+
+
+    out_fn = "NSW_LAI_pixels.tar.gz"
+    with tarfile.open(out_fn, "w:gz") as tar:
+        for name in glob.glob("pixels/*.bin"):
+            tar.add(name)
+    
+
     """
     data = np.fromfile("pixels/%d_%d_LAI.bin" % (450, 717))
 
