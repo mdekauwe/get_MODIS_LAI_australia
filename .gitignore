@@ -7,3 +7,10 @@ hdfs/*
 hdf_zipped/*
 
 .DS_Store
+
+modis_climatology.bin
+modis_climatology_splined.bin
+pixels/*
+
+files_for_remko_LAI
+files_for_remko_LAI.tar
