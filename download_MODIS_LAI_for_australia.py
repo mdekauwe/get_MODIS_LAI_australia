@@ -36,7 +36,7 @@ def get_data(product_code, collection, label, band):
                 "lpdaac-mosaics-cmar/v1-hdf4/aust/")
 
     # There is a missing data in 2001...
-    for yr in range(2002, 2019):
+    for yr in range(2000, 2019):
         out_yr_dir = os.path.join(out_fdir, "%s" % (str(yr)))
         if not os.path.exists(out_yr_dir):
             os.makedirs(out_yr_dir)
@@ -56,8 +56,10 @@ def get_data(product_code, collection, label, band):
 
             in_url = os.path.join(url, fn)
             out_path = os.path.join(out_yr_dir, fn)
-            urllib.request.urlretrieve(in_url, out_path)
-
+            try:
+                urllib.request.urlretrieve(in_url, out_path)
+            except:
+                print("Missing: %s" % doy_str)
 
 if __name__ == "__main__":
 
@@ -69,10 +71,10 @@ if __name__ == "__main__":
     label = "1000m_lai"
     get_data(product_code, collection, label, band)
 
-    band = "b03"
-    label = "1000m_quality"
-    get_data(product_code, collection, label, band)
+    #band = "b03"
+    #label = "1000m_quality"
+    #get_data(product_code, collection, label, band)
 
-    band = "b06"
-    label = "1000m_lai_stdev"
-    get_data(product_code, collection, label, band)
+    #band = "b06"
+    #label = "1000m_lai_stdev"
+    #get_data(product_code, collection, label, band)
