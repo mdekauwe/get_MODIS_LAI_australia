@@ -35,8 +35,8 @@ def get_data(product_code, collection, label, band):
     base_url = ("http://remote-sensing.nci.org.au/u39/public/data/modis/"
                 "lpdaac-mosaics-cmar/v1-hdf4/aust/")
 
-    # There is a missing data in 2001...
-    for yr in range(2000, 2019):
+    # chunk of missing data in 2000...no data beyoond doy 89 in 2017
+    for yr in range(2001, 2017):
         out_yr_dir = os.path.join(out_fdir, "%s" % (str(yr)))
         if not os.path.exists(out_yr_dir):
             os.makedirs(out_yr_dir)
